@@ -6,7 +6,7 @@ def test_block_falling_starting_location():
     block = OBlock()
     block_falling = BlockFalling(block)
 
-    assert block_falling.get_location() == (BOARD_W // 2, BOARD_H - 2)
+    assert block_falling.get_location() == (BOARD_W // 2, BOARD_H + 2)
 
 
 def test_block_falling_change_location():
@@ -21,9 +21,9 @@ def test_block_falling_change_location():
     block_falling.go_right()
     block_falling.turn_left()
 
-    expected = (BOARD_W // 2 - 1, BOARD_H - 2 - 2)
+    expected = (BOARD_W // 2 - 1, BOARD_H - 2 + 2)
 
-    assert block_falling.g() == expected
+    assert block_falling.get_location() == expected
 
 
 def test_block_falling_blocks_on_board():

@@ -1,15 +1,13 @@
 # SEEMS VAGUELY DONE, MIGHT NEED ARCHTECTURAL CHANGES LATER
-
+from board import BOARD_H, BOARD_W
 
 # center of board, at the top of visible board (with enough place for)
-BOARD_W = 10
-BOARD_H = 24
 STARTING_LOCATION = (BOARD_W // 2, BOARD_H - 2)
 
 
 class BlockFalling:
-    def __init__(self, block):
-        self._location = list(STARTING_LOCATION)
+    def __init__(self, block, width=BOARD_W, height=BOARD_H):
+        self._location = [width//2, height + 2]
         self._block = block
 
     def get_location(self):
