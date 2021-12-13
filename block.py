@@ -1,4 +1,4 @@
-# SEEMS DONE, MIGHT NEED ARCHTECTURAL CHANGES LATER
+# TESTED
 
 class Block:
     def __init__(self):

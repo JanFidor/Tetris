@@ -1,4 +1,4 @@
-# SEEMS VAGUELY DONE, MIGHT NEED ARCHTECTURAL CHANGES LATER
+# SEEMS TESTED
 from board import BOARD_H, BOARD_W
 
 # center of board, at the top of visible board (with enough place for)
@@ -7,30 +7,21 @@ STARTING_LOCATION = (BOARD_W // 2, BOARD_H - 2)
 
 class BlockFalling:
     def __init__(self, block, width=BOARD_W, height=BOARD_H):
-        self._location = [width//2, height + 2]
+        self.location = (width//2, height + 2)
         self._block = block
 
-    def get_location(self):
-        return tuple(self._location)
+    def execute_operation(self, move):
+        move.set_position(self)
 
-    def go_left(self):
-        self._location[0] -= 1
-
-    def go_right(self):
-        self._location[0] += 1
-
-    def go_down(self):
-        self._location[1] -= 1
-
-    def turn_left(self):
-        self._block.turn_left()
-
-    def turn_right(self):
-        self._block.turn_right()
+    def get_blocks(self):
+        return self._block.get_blocks()
 
     def blocks_on_board(self):
-        x1, y1 = self._location
-        return tuple((x1 + x2, y1 + y2) for x2, y2 in self._block._blocks)
+        x1, y1 = self.location
+        return tuple((x1 + x2, y1 + y2) for x2, y2 in self._block.get_blocks())
 
-    def color(self):
+    def get_color(self):
         return self._block.color
+
+    def get_inner_block(self):
+        return self._block
