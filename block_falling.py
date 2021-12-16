@@ -1,7 +1,9 @@
 # SEEMS TESTED
 from board import BOARD_H, BOARD_W
 
+
 # center of board, at the top of visible board (with enough place for)
+# change for constant
 STARTING_LOCATION = (BOARD_W // 2, BOARD_H - 2)
 
 
@@ -11,7 +13,7 @@ class BlockFalling:
         self._block = block
 
     def execute_operation(self, move):
-        move.set_position(self)
+        move.change_position(self)
 
     def get_blocks(self):
         return self._block.get_blocks()

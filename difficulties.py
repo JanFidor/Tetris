@@ -1,4 +1,5 @@
 
+# change to dictionary
 class Difficulty:
     def get_multiplier():
         pass

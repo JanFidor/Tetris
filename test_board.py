@@ -78,8 +78,8 @@ def test_clear_rows():
     width = len(board._board[0])
 
     board._board[0] = [1 for i in range(width)]
-    board._board[1][0] = 2
-    board._board[2] = [1 for i in range(width)]
+    board._board[1] = [1 for i in range(width)]
+    board._board[2][0] = 2
 
     cleared = board.clear_rows((0, 1, 2, 3))
 
