@@ -1,4 +1,5 @@
 from operations import Operation
+from constants import BOARD_W, BOARD_H, MAX_BLOCK_HEIGHT
 
 
 class BlockIsNullError(Exception):
@@ -6,53 +7,113 @@ class BlockIsNullError(Exception):
         super().__init__("Block not added to BlockFallingManager")
 
 
-BOARD_W = 10
-BOARD_H = 20
-
-
 class Board:
-    def __init__(self, width=BOARD_W, height=BOARD_H):
-        self._width = width
-        self._height = height
+    def generate_empty_row(self):
+        """
+        Generate empty row for Tetris board and return it
+        """
+        return [None for _ in range(self._width)]
 
-        # change to constant
-        self._board = [[None for _ in range(width)] for _ in range(height + 4)]
+    def __init__(self):
+        self._width = BOARD_W
+        self._height = BOARD_H
+
+        board_height = self._height + MAX_BLOCK_HEIGHT
+        self._board = [self.generate_empty_row() for _ in range(board_height)]
+
+    def get_block(self, x, y):
+        """
+        Return blocks color or None at x, y at _board
+
+        Keyword arguments: x -> x position
+        Keyword arguments: y -> y position
+        """
+        return self._board[y][x]
+
+    def place_block(self, block_falling):
+        """
+        Save color of block_falling inside _board at appropriate coordinates
+        """
+        for block in block_falling.blocks_on_board():
+            x, y = block
+            self._board[y][x] = block_falling.get_color()
+
+    def clear_block(self, block_falling):
+        """
+        Clear blocks of block_falling from the _board
+        """
+        for block in block_falling.blocks_on_board():
+            x, y = block
+            self._board[y][x] = None
 
     def _verify_block_not_null(block):
         if block is None:
             raise BlockIsNullError()
 
-    def land_block(self, block):
-        Board._verify_block_not_null(block)
+    def land_block(self, block_falling):
+        """
+        Save color of block_falling positions of its blocks
+        """
+        Board._verify_block_not_null(block_falling)
 
-        for x, y in block.blocks_on_board():
-            self._board[y][x] = block.get_color()
+        for x, y in block_falling.blocks_on_board():
+            self._board[y][x] = block_falling.get_color()
 
-    def is_above_board(self, block):
-        Board._verify_block_not_null(block)
+    def is_above_board(self, block_falling):
+        """
+        Check if block_falling has a block above the board
+        """
+        Board._verify_block_not_null(block_falling)
 
-        for x, y in block.blocks_on_board():
+        for _, y in block_falling.blocks_on_board():
             if y >= self._height:
                 return True
         return False
 
     def _iterate_condition(self, positions: tuple):
-        # loc_x, loc_y = self._block.get_location()
+        """
+        Check if _existance_condition is met for all positions of 'positions'
+        Returned: boolean
+        """
+        blocks_checks = []
         for block_x, block_y in positions:
-            if not self._existance_condition(block_x, block_y):
-                return False
-        return True
+            blocks_checks.append(self._existance_condition(block_x, block_y))
+
+        return all(blocks_checks)
 
     def _existance_condition(self, x: int, y: int):
-        return 0 <= x < BOARD_W and y >= 0 and self._board[y][x] is None
+        """
+        Check if block can exist at those coordinates
 
-    def can_execute_operation(self, move: Operation, block):
-        Board._verify_block_not_null(block)
+        Keyword arguments: x -> x position
+        Keyword arguments: y -> y position
 
-        new_blocks = move.next_position(block)
-        return self._iterate_condition(new_blocks)
+        Returned: boolean
+        """
+        if not 0 <= x < BOARD_W:
+            return False
+        if y < 0:
+            return False
+        if self._board[y][x] is not None:
+            return False
+        return True
+
+    def can_execute_operation(self, operation: Operation, block_falling):
+        """
+        Check if after executing the operation block_falling could exist on
+        board
+        """
+        Board._verify_block_not_null(block_falling)
+        new_blocks = operation.next_position(block_falling)
+        can_execute = self._iterate_condition(new_blocks)
+
+        return can_execute
 
     def clear_row(self, row_id: int) -> bool:
+        """
+        Check if can empty the row, return the result and empty the row is
+        possible
+        """
         if None not in self._board[row_id]:
             self._board.pop(row_id)
             self._board.append([None for _ in range(self._width)])
@@ -60,6 +121,9 @@ class Board:
         return False
 
     def clear_rows(self, rows: set):
+        """
+        Check if can empty rows, return how many rows were cleared
+        """
         rows_cleared = 0
 
         # set reverse flag, so that poping rows doesn't interfere
@@ -68,3 +132,6 @@ class Board:
             if self.clear_row(row_id):
                 rows_cleared += 1
         return rows_cleared
+
+    def dimensions(self):
+        return self._width, self._height

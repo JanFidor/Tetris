@@ -15,4 +15,9 @@ BLOCKS = [
 
 
 def generate_random_block():
+    """
+    Returns random block from BLOCKS
+
+    Returned: random block
+    """
     return choice(BLOCKS)()

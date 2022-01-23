@@ -1,29 +1,46 @@
 # TESTED
+from constants import Color
+
 
 class Block:
     def __init__(self):
-        self.color = "0x000000"
+        self.color = Color.BLACK
         self._blocks = None
 
     def get_left_position(self):
+        """
+        Return blocks resulting from turning left
+        """
         return tuple((-y, x) for x, y in self._blocks)
 
     def turn_left(self):
+        """
+        Set _blocks to blocks resulting from turning left
+        """
         self._blocks = self.get_left_position()
 
     def get_right_position(self):
+        """
+        Return blocks resulting from turning right
+        """
         return tuple((y, -x) for x, y in self._blocks)
 
     def turn_right(self):
+        """
+        Set _blocks to blocks resulting from turning right
+        """
         self._blocks = self.get_right_position()
 
     def get_blocks(self):
+        """
+        Return _blocks
+        """
         return self._blocks
 
 
 class IBlock(Block):
     def __init__(self):
-        self.color = "0x00EEEE"
+        self.color = Color.CYAN
         self._positions = (
             ((-2, 0), (-1, 0), (0, 0), (1, 0)),
             ((0, 1), (0, 0), (0, -1), (0, -2)),
@@ -52,19 +69,19 @@ class IBlock(Block):
 
 class JBlock(Block):
     def __init__(self):
-        self.color = "0x0000CD"
+        self.color = Color.DARK_BLUE
         self._blocks = ((-1, 1), (-1, 0), (0, 0), (1, 0))
 
 
 class LBlock(Block):
     def __init__(self):
-        self.color = "0xFF7F24"
-        self._blocks = ((1, 0), (0, 0), (1, 0), (1, 1))
+        self.color = Color.ORANGE
+        self._blocks = ((-1, 0), (0, 0), (1, 0), (1, 1))
 
 
 class OBlock(Block):
     def __init__(self):
-        self.color = "0xFFD700"
+        self.color = Color.YELLOW
         self._blocks = ((0, 0), (0, 1), (1, 0), (1, 1))
 
     def get_left_position(self):
@@ -76,17 +93,17 @@ class OBlock(Block):
 
 class SBlock(Block):
     def __init__(self):
-        self.color = "0x00C957"
+        self.color = Color.GREEN
         self._blocks = ((-1, 0), (0, 0), (0, 1), (1, 1))
 
 
 class TBlock(Block):
     def __init__(self):
-        self.color = "0x9400D3"
+        self.color = Color.PURPLE
         self._blocks = ((-1, 0), (0, 0), (1, 0), (0, 1))
 
 
 class ZBlock(Block):
     def __init__(self):
-        self.color = "0xFF3030"
+        self.color = Color.RED
         self._blocks = ((-1, 1), (0, 1), (0, 0), (1, 0))
