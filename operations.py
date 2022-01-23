@@ -1,7 +1,7 @@
 from block_falling import BlockFalling
 
 
-class Operation:
+class OperationStrategy:
     """
     Operation model representing possible transforations of tetris block
     position, implements strategy design pattern
@@ -39,7 +39,7 @@ class Operation:
         pass
 
 
-class GoLeft(Operation):
+class GoLeft(OperationStrategy):
     def _new_blocks_positions(block: BlockFalling):
         return tuple((x - 1, y) for x, y in block.get_blocks())
 
@@ -48,7 +48,7 @@ class GoLeft(Operation):
         block.location = x - 1, y
 
 
-class GoRight(Operation):
+class GoRight(OperationStrategy):
     def _new_blocks_positions(block: BlockFalling):
         return tuple((x + 1, y) for x, y in block.get_blocks())
 
@@ -57,7 +57,7 @@ class GoRight(Operation):
         block.location = x + 1, y
 
 
-class GoDown(Operation):
+class GoDown(OperationStrategy):
     def _new_blocks_positions(block: BlockFalling):
         return tuple((x, y - 1) for x, y in block.get_blocks())
 
@@ -66,17 +66,17 @@ class GoDown(Operation):
         block.location = x, y - 1
 
 
-class TurnLeft(Operation):
+class TurnLeft(OperationStrategy):
     def _new_blocks_positions(block: BlockFalling):
-        return block.get_inner_block().get_left_position()
+        return block.block().get_left_position()
 
     def change_position(block: BlockFalling):
-        block.get_inner_block().turn_left()
+        block.block().turn_left()
 
 
-class TurnRight(Operation):
+class TurnRight(OperationStrategy):
     def _new_blocks_positions(block: BlockFalling):
-        return block.get_inner_block().get_right_position()
+        return block.block().get_right_position()
 
     def change_position(block: BlockFalling):
-        block.get_inner_block().turn_right()
+        block.block().turn_right()

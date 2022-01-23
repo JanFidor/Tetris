@@ -1,4 +1,4 @@
-from operations import Operation
+from operations import OperationStrategy
 from constants import BOARD_W, BOARD_H, MAX_BLOCK_HEIGHT
 
 
@@ -98,7 +98,7 @@ class Board:
             return False
         return True
 
-    def can_execute_operation(self, operation: Operation, block_falling):
+    def can_execute_operation(self, operation: OperationStrategy, block_falling):
         """
         Check if after executing the operation block_falling could exist on
         board
@@ -111,7 +111,7 @@ class Board:
 
     def clear_row(self, row_id: int) -> bool:
         """
-        Check if can empty the row, return the result and empty the row is
+        Check if can empty the row, return the result and empty the row if
         possible
         """
         if None not in self._board[row_id]:
@@ -122,7 +122,7 @@ class Board:
 
     def clear_rows(self, rows: set):
         """
-        Check if can empty rows, return how many rows were cleared
+        Clear rows that can be cleared, return how many were
         """
         rows_cleared = 0
 
